@@ -13,12 +13,15 @@ logging.warning('Protocol problem: %s', 'connection reset', extra=d)
 
 
 def checkArpTable():
-    result = subprocess.check_output("arp -a ", shell=True).decode(encoding='ascii')
-    rows = result.split("\n")
-    rowparsed = list(filter ( bool , map( lambda x : re.findall(".* \((.*)\) at (.*) \[ether\] on (.*)",x) , rows))) 
-    dicty = set(map( lambda x : x[0][1],rowparsed))
-    print(len(dicty) == len(rowparsed))
-    
+    while(True):
+        result = subprocess.check_output("arp -a ", shell=True).decode(encoding='ascii')
+        rows = result.split("\n")
+        rowparsed = list(filter ( bool , map( lambda x : re.findall(".* \((.*)\) at (.*) \[ether\] on (.*)",x) , rows))) 
+        dicty = set(map( lambda x : x[0][1],rowparsed))
+        print(rowparsed)
+        print(len(dicty) == len(rowparsed))
+        time.sleep(2)
+        
 def packetHandle(pack): 
     arpp = pack[ARP]
     
